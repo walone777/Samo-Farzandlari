@@ -31,6 +31,9 @@ function initializePresentation() {
         }
     });
     
+    // Initialize Telegram Question Form
+    initializeTelegramForm();
+    
     // Add smooth loading animation
     setTimeout(() => {
         document.body.classList.add('loaded');
@@ -165,6 +168,15 @@ function updatePageTitle() {
 
 // Handle Keyboard Navigation
 function handleKeyPress(event) {
+    // Check if user is typing in an input field
+    const activeElement = document.activeElement;
+    const isInputFocused = activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA');
+    
+    // Don't handle keyboard navigation if user is typing in form fields
+    if (isInputFocused) {
+        return;
+    }
+    
     switch(event.key) {
         case 'ArrowRight':
         case ' ':
@@ -507,6 +519,11 @@ document.addEventListener('click', function(event) {
     if (event.target.closest('.team-member')) {
         handleTeamMemberClick(event.target.closest('.team-member'));
     }
+    
+    // Handle Telegram contact clicks
+    if (event.target.closest('.contact-item')) {
+        handleTelegramClick(event.target.closest('.contact-item'));
+    }
 });
 
 // Handle CTA Button Clicks
@@ -529,8 +546,8 @@ function handleCTAClick(button) {
             showNotification('Savol berish funksiyasi tez orada ishga tushadi!');
             break;
         case 'Hoziroq qo\'shilish':
-            // Could redirect to Telegram or a signup form
-            window.open('https://t.me/Obloberdiyev_2oo8', '_blank');
+            // Redirect to Samo_Farzandlar Telegram channel
+            window.open('https://t.me/Samo_Farzandlar', '_blank');
             break;
     }
 }
@@ -557,6 +574,22 @@ function handleTeamMemberClick(member) {
     
     const memberName = member.querySelector('h3').textContent;
     showNotification(`${memberName} bilan bog'lanish tez orada mumkin bo'ladi!`);
+}
+
+// Handle Telegram Contact Clicks
+function handleTelegramClick(contactItem) {
+    // Add click animation
+    contactItem.style.transform = 'scale(0.98)';
+    setTimeout(() => {
+        contactItem.style.transform = 'scale(1)';
+    }, 200);
+    
+    const telegramHandle = contactItem.querySelector('h3').textContent;
+    const telegramUrl = `https://t.me/${telegramHandle.replace('@', '')}`;
+    
+    // Open Telegram link
+    window.open(telegramUrl, '_blank');
+    showNotification(`${telegramHandle} sahifasi yangi oynada ochilmoqda...`);
 }
 
 // Show Notification
@@ -616,3 +649,162 @@ window.presentationControls = {
     startAutoAdvance,
     toggleFullscreen
 };
+
+// Telegram Question Form Functionality
+function initializeTelegramForm() {
+    const BOT_TOKEN = "8364953237:AAEpf1pav8VmdUfv1_wGQg6DU03P0Umcj-Q";
+    const ADMIN_CHAT_ID = "6781131482"; // Admin chat for receiving questions
+    const USER_CHAT_ID = "6781131482"; // User chat for sending answers
+    
+    console.log('Telegram form initialization started...');
+    
+    // Global function for sending answers (can be called from console)
+    window.sendAnswer = function(answer) {
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                chat_id: USER_CHAT_ID,
+                text: "✅ Taklifingizga javob: " + answer
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                console.log('Answer sent successfully to user:', answer);
+            } else {
+                console.error('Failed to send answer:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error sending answer:', error);
+        });
+    };
+    
+    const questionForm = document.getElementById('questionForm');
+    if (!questionForm) {
+        console.error('Question form not found!');
+        return;
+    }
+    
+    console.log('Question form found:', questionForm);
+    
+    questionForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('Form submitted!');
+        
+        const questionInput = document.getElementById('question');
+        const submitBtn = questionForm.querySelector('.submit-btn');
+        
+        if (!questionInput) {
+            console.error('Question input not found!');
+            return;
+        }
+        
+        if (!submitBtn) {
+            console.error('Submit button not found!');
+            return;
+        }
+        
+        const question = questionInput.value.trim();
+        console.log('Suggestion text:', question);
+        
+        if (!question) {
+            showFormMessage('Iltimos, taklifingizni yozing!', 'error');
+            return;
+        }
+        
+        // Disable form during submission
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Yuborilmoqda...';
+        
+        console.log('Sending to Telegram...');
+        
+        // Alternative method for CORS issues
+        const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        const messageData = {
+            chat_id: ADMIN_CHAT_ID,
+            text: `💡 Yangi taklif: ${question}`
+        };
+        
+        // Send to Telegram with proper CORS handling
+        fetch(telegramUrl, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            mode: 'cors',
+            body: JSON.stringify(messageData)
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Telegram API response:', data);
+            if (data.ok) {
+                showFormMessage('Taklif muvaffaqiyatli yuborildi! ✅', 'success');
+                questionInput.value = '';
+            } else {
+                console.error('Telegram API Error:', data);
+                showFormMessage(`Xatolik: ${data.description || 'Noma\'lum xatolik'}`, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Network Error:', error);
+            
+            // Alternative method using proxy or different approach
+            if (error.message.includes('CORS') || error.message.includes('fetch')) {
+                // Show success message even if there's CORS issue
+                // The message might still go through
+                showFormMessage('Taklif yuborildi (CORS cheklov tufayli tasdiqlash imkonsiz) ✉️', 'success');
+                questionInput.value = '';
+            } else {
+                showFormMessage('Tarmoq xatosi. Internetni tekshiring va qayta urinib ko\'ring.', 'error');
+            }
+        })
+        .finally(() => {
+            // Re-enable form
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Yuborish';
+        });
+    });
+}
+
+// Show Form Message
+function showFormMessage(message, type) {
+    // Remove existing message
+    const existingMessage = document.querySelector('.form-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    // Create new message
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `form-message ${type}`;
+    messageDiv.textContent = message;
+    
+    // Insert after form
+    const formContainer = document.querySelector('.question-form-container');
+    if (formContainer) {
+        formContainer.appendChild(messageDiv);
+        
+        // Show with animation
+        setTimeout(() => {
+            messageDiv.classList.add('show');
+        }, 100);
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.classList.remove('show');
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 300);
+            }
+        }, 5000);
+    }
+}

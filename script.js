@@ -7,6 +7,8 @@ let isTransitioning = false;
 const slides = document.querySelectorAll('.slide');
 const nextBtn = document.getElementById('next-btn');
 const prevBtn = document.getElementById('prev-btn');
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
 const currentSlideSpan = document.getElementById('current-slide');
 const totalSlidesSpan = document.getElementById('total-slides');
 const progressFill = document.getElementById('progress-fill');
@@ -34,6 +36,9 @@ function initializePresentation() {
     // Initialize Telegram Question Form
     initializeTelegramForm();
     
+    // Initialize Theme
+    initializeTheme();
+    
     // Add smooth loading animation
     setTimeout(() => {
         document.body.classList.add('loaded');
@@ -45,6 +50,9 @@ function setupEventListeners() {
     // Navigation buttons
     nextBtn.addEventListener('click', nextSlide);
     prevBtn.addEventListener('click', prevSlide);
+    
+    // Theme toggle
+    themeToggle.addEventListener('click', toggleTheme);
     
     // Keyboard navigation
     document.addEventListener('keydown', handleKeyPress);
@@ -201,6 +209,11 @@ function handleKeyPress(event) {
         case 'Escape':
             event.preventDefault();
             toggleFullscreen();
+            break;
+        case 't':
+        case 'T':
+            event.preventDefault();
+            toggleTheme();
             break;
     }
     
@@ -523,6 +536,43 @@ function toggleFullscreen() {
     }
 }
 
+// Theme Management
+function initializeTheme() {
+    // Check for saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    
+    // Show notification
+    const message = newTheme === 'dark' ? 'Tungi rejim yoqildi 🌙' : 'Kunduzgi rejim yoqildi ☀️';
+    showNotification(message);
+    
+    // Add click animation
+    themeToggle.style.transform = 'scale(0.9)';
+    setTimeout(() => {
+        themeToggle.style.transform = 'scale(1)';
+    }, 150);
+}
+
+function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    
+    // Update icon
+    if (theme === 'dark') {
+        themeIcon.className = 'fas fa-sun';
+        themeToggle.title = 'Kunduzgi rejim';
+    } else {
+        themeIcon.className = 'fas fa-moon';
+        themeToggle.title = 'Tungi rejim';
+    }
+}
+
 // Auto-advance slides (Optional - can be enabled for demo mode)
 function startAutoAdvance(intervalSeconds = 10) {
     const interval = setInterval(() => {
@@ -635,16 +685,19 @@ function showNotification(message) {
         <span>${message}</span>
     `;
     
+    // Get current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    
     // Add notification styles
     notification.style.cssText = `
         position: fixed;
         top: 100px;
         right: 20px;
-        background: linear-gradient(135deg, #4A90E2 0%, #7B68EE 100%);
+        background: ${isDark ? 'linear-gradient(135deg, #5BA3F5 0%, #8B7BF7 100%)' : 'linear-gradient(135deg, #4A90E2 0%, #7B68EE 100%)'};
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 10px;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        box-shadow: ${isDark ? '0 8px 30px rgba(91, 163, 245, 0.3)' : '0 8px 30px rgba(0,0,0,0.15)'};
         z-index: 2000;
         display: flex;
         align-items: center;
@@ -654,6 +707,7 @@ function showNotification(message) {
         transform: translateX(100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         max-width: 300px;
+        border: ${isDark ? '1px solid rgba(91, 163, 245, 0.3)' : 'none'};
     `;
     
     document.body.appendChild(notification);

@@ -159,17 +159,17 @@ p {
 }
 
 .slide-content {
-    max-width: 1400px; /* Kattaroq qildik */
-    width: 95%; /* Kengroq qildik */
+    width: 100%;
+    height: 100vh;
     background: var(--white);
-    border-radius: var(--border-radius);
-    padding: 2.5rem; /* Kamroq padding */
-    box-shadow: var(--shadow-medium);
-    margin: 0 auto;
-    min-height: calc(85vh - 40px); /* Balandroq qildik */
+    border-radius: 0;
+    padding: 6rem 2rem 2rem; /* Top padding for navbar */
+    box-shadow: none;
+    margin: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow-y: auto;
 }
 
 /* Slide 1: Hero Section */
@@ -208,6 +208,81 @@ p {
 
 .hero-cta {
     margin-top: 2rem;
+}
+
+/* Table of Contents */
+.toc-section {
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.table-of-contents {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.toc-title {
+    text-align: center;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.toc-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1rem;
+    max-width: 100%;
+}
+
+.toc-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 2rem;
+    background: var(--light-gray);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    box-shadow: var(--shadow-light);
+}
+
+.toc-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--primary-blue);
+    background: white;
+}
+
+.toc-number {
+    background: var(--gradient-bg);
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+.toc-text {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 1.1rem;
+    text-align: left;
 }
 
 /* Slide Titles */
@@ -782,6 +857,56 @@ p {
     margin: 0;
 }
 
+/* Presentation Footer */
+.presentation-footer {
+    margin-top: 3rem;
+    padding: 2rem 0 1rem;
+    border-top: 3px solid var(--primary-blue);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.footer-section h4 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.footer-section p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-section i {
+    color: var(--primary-blue);
+    font-size: 1rem;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.footer-bottom p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin: 0;
+    font-style: italic;
+}
+
 /* CTA Buttons */
 .cta-button {
     background: var(--gradient-bg);
@@ -830,9 +955,7 @@ p {
 /* Responsive Design */
 @media (max-width: 1024px) {
     .slide-content {
-        padding: 2rem;
-        min-height: calc(80vh - 30px); /* Tablet uchun kattaroq */
-        width: 90%; /* Tablet uchun kengroq */
+        padding: 6rem 1.5rem 2rem;
     }
     
     .services-grid {
@@ -882,11 +1005,11 @@ p {
     }
     
     .slide {
-        padding: 1rem;
+        padding: 0;
     }
     
     .slide-content {
-        padding: 1.5rem;
+        padding: 5rem 1rem 2rem;
     }
     
     .main-title {
@@ -914,13 +1037,32 @@ p {
     .achievement-badges {
         justify-content: center;
     }
+    
+    /* Table of Contents Mobile */
+    .table-of-contents {
+        margin: 1.5rem auto;
+    }
+    
+    .toc-list {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .toc-item {
+        padding: 1rem 1.5rem;
+    }
+    
+    /* Footer Mobile */
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1.5rem;
+    }
 }
 
 @media (max-width: 480px) {
     .slide-content {
-        padding: 1.5rem;
-        min-height: calc(70vh - 20px); /* Mobil uchun ham kattaroq */
-        width: 95%; /* Mobil uchun to'liq kengliko */
+        padding: 5rem 0.8rem 1.5rem;
     }
     
     .main-title {
@@ -975,5 +1117,42 @@ p {
     .submit-btn {
         width: 100%;
         justify-content: center;
+    }
+    
+    /* Table of Contents Extra Small */
+    .table-of-contents {
+        margin: 1rem auto;
+    }
+    
+    .toc-list {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .toc-item {
+        padding: 1rem;
+    }
+    
+    .toc-number {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+    
+    .toc-text {
+        font-size: 0.95rem;
+    }
+    
+    /* Footer Extra Small */
+    .presentation-footer {
+        padding: 1.5rem 0 1rem;
+    }
+    
+    .footer-section h4 {
+        font-size: 1rem;
+    }
+    
+    .footer-section p {
+        font-size: 0.85rem;
     }
 }

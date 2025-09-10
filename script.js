@@ -1,6 +1,6 @@
 // Global Variables
 let currentSlide = 1;
-const totalSlides = 8;
+const totalSlides = 9;
 let isTransitioning = false;
 
 // DOM Elements
@@ -154,6 +154,7 @@ function updateUI() {
 function updatePageTitle() {
     const slideTitles = [
         'Samo Farzandlari - Bilim kelajakka yo\'l',
+        'Mundaraja',
         'Samo Farzandlari qanday loyiha?',
         'Sizga qanday yordam beradi?',
         'Nega ishonish kerak?',
@@ -261,24 +262,27 @@ function triggerSlideAnimations() {
                 animateHeroElements(activeSlide);
                 break;
             case 'slide-2':
-                animateServiceCards(activeSlide);
+                animateTOCElements(activeSlide);
                 break;
             case 'slide-3':
-                animateBenefitsList(activeSlide);
+                animateServiceCards(activeSlide);
                 break;
             case 'slide-4':
-                animateCEOSection(activeSlide);
+                animateBenefitsList(activeSlide);
                 break;
             case 'slide-5':
-                animateTeamMembers(activeSlide);
+                animateCEOSection(activeSlide);
                 break;
             case 'slide-6':
-                animateOpportunityCards(activeSlide);
+                animateTeamMembers(activeSlide);
                 break;
             case 'slide-7':
-                animateQASection(activeSlide);
+                animateOpportunityCards(activeSlide);
                 break;
             case 'slide-8':
+                animateQASection(activeSlide);
+                break;
+            case 'slide-9':
                 animateJoinSection(activeSlide);
                 break;
         }
@@ -307,6 +311,35 @@ function animateHeroElements(slide) {
                 }, 50);
             }, index * 200);
         }
+    });
+}
+
+function animateTOCElements(slide) {
+    const title = slide.querySelector('.slide-title');
+    const tocItems = slide.querySelectorAll('.toc-item');
+    
+    if (title) {
+        title.style.opacity = '0';
+        title.style.transform = 'translateY(30px)';
+        title.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        
+        setTimeout(() => {
+            title.style.opacity = '1';
+            title.style.transform = 'translateY(0)';
+        }, 200);
+    }
+    
+    tocItems.forEach((item, index) => {
+        setTimeout(() => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(30px) scale(0.9)';
+            item.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            setTimeout(() => {
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0) scale(1)';
+            }, 50);
+        }, 400 + (index * 100));
     });
 }
 

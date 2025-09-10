@@ -22,6 +22,21 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Dark Mode Variables */
+[data-theme="dark"] {
+    --primary-blue: #5BA3F5;
+    --primary-purple: #8B7BF7;
+    --gradient-bg: linear-gradient(135deg, #5BA3F5 0%, #8B7BF7 100%);
+    --white: #1a1a2e;
+    --light-gray: #16213e;
+    --dark-gray: #0f0f23;
+    --accent-color: #00E6C3;
+    --text-primary: #ffffff;
+    --text-secondary: #b8c5d1;
+    --shadow-light: 0 2px 20px rgba(0,0,0,0.3);
+    --shadow-medium: 0 8px 30px rgba(0,0,0,0.4);
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     line-height: 1.6;
@@ -123,6 +138,38 @@ p {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: var(--gradient-bg) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-toggle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.theme-toggle:hover::before {
+    transform: translateX(100%);
+}
+
+[data-theme="dark"] .theme-toggle {
+    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%) !important;
+}
+
+/* Dark mode transitions */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Presentation Container */
@@ -950,6 +997,92 @@ p {
     background: var(--gradient-bg);
     transition: width 0.3s ease;
     width: 12.5%;
+}
+
+/* Dark Mode Specific Styles */
+[data-theme="dark"] .navbar {
+    background: rgba(26, 26, 46, 0.98);
+    border-bottom: 2px solid rgba(91, 163, 245, 0.3);
+}
+
+[data-theme="dark"] .navbar:hover {
+    background: rgba(26, 26, 46, 1);
+    border-bottom: 2px solid rgba(91, 163, 245, 0.5);
+}
+
+[data-theme="dark"] .service-card,
+[data-theme="dark"] .team-member,
+[data-theme="dark"] .opportunity-card,
+[data-theme="dark"] .toc-item {
+    background: var(--light-gray);
+    border: 2px solid rgba(91, 163, 245, 0.1);
+}
+
+[data-theme="dark"] .service-card:hover,
+[data-theme="dark"] .team-member:hover,
+[data-theme="dark"] .opportunity-card:hover,
+[data-theme="dark"] .toc-item:hover {
+    background: var(--dark-gray);
+    border-color: var(--primary-blue);
+    box-shadow: 0 8px 30px rgba(91, 163, 245, 0.2);
+}
+
+[data-theme="dark"] .question-form-container {
+    background: var(--light-gray);
+    border: 1px solid rgba(91, 163, 245, 0.2);
+}
+
+[data-theme="dark"] .question-input {
+    background: var(--dark-gray);
+    border-color: rgba(91, 163, 245, 0.3);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .question-input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(91, 163, 245, 0.2);
+}
+
+[data-theme="dark"] .question-input::placeholder {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .form-message.success {
+    background: rgba(0, 230, 195, 0.1);
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+[data-theme="dark"] .form-message.error {
+    background: rgba(255, 99, 99, 0.1);
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+[data-theme="dark"] .presentation-footer {
+    background: linear-gradient(135deg, var(--light-gray) 0%, var(--dark-gray) 100%);
+    border-top: 3px solid var(--primary-blue);
+}
+
+[data-theme="dark"] .footer-bottom {
+    border-top: 1px solid rgba(91, 163, 245, 0.2);
+}
+
+/* Dark mode progress bar */
+[data-theme="dark"] .progress-bar {
+    background: rgba(15, 15, 35, 0.8);
+}
+
+/* Dark mode achievements and badges */
+[data-theme="dark"] .key-achievement {
+    background: var(--light-gray);
+    border: 1px solid rgba(91, 163, 245, 0.1);
+}
+
+[data-theme="dark"] .illustration-placeholder,
+[data-theme="dark"] .qr-placeholder {
+    background: var(--light-gray);
+    border-color: var(--primary-blue);
 }
 
 /* Responsive Design */

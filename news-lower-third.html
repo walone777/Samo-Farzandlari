@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samo Farzandlari - News Lower Third Animation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+        }
+
+        .lower-third-container {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            z-index: 1000;
+        }
+
+        .circle-element {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4A90E2 0%, #2E86AB 50%, #A23B72 100%);
+            box-shadow: 
+                0 8px 32px rgba(74, 144, 226, 0.4),
+                0 4px 16px rgba(74, 144, 226, 0.2),
+                inset 0 2px 4px rgba(255, 255, 255, 0.2);
+            animation: circleAnimation 6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0;
+        }
+
+        .circle-element::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent);
+            z-index: -1;
+            filter: blur(1px);
+        }
+
+        .lines-container {
+            position: absolute;
+            bottom: 30px;
+            left: 100px;
+            width: 0;
+            height: 60px;
+            opacity: 0;
+            animation: linesAnimation 6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            animation-delay: 1.5s;
+        }
+
+        .line-primary {
+            height: 8px;
+            background: linear-gradient(90deg, #4A90E2 0%, #2E86AB 70%, rgba(74, 144, 226, 0.3) 100%);
+            border-radius: 4px;
+            margin-bottom: 8px;
+            box-shadow: 
+                0 2px 8px rgba(74, 144, 226, 0.3),
+                inset 0 1px 2px rgba(255, 255, 255, 0.2);
+            animation: lineExpand 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            animation-delay: 1.8s;
+            width: 0;
+        }
+
+        .line-secondary {
+            height: 4px;
+            background: linear-gradient(90deg, #6BB6FF 0%, rgba(107, 182, 255, 0.6) 60%, transparent 100%);
+            border-radius: 2px;
+            margin-bottom: 6px;
+            box-shadow: 0 1px 4px rgba(107, 182, 255, 0.2);
+            animation: lineExpand 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            animation-delay: 2.2s;
+            width: 0;
+        }
+
+        .line-accent {
+            height: 2px;
+            background: linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.4) 40%, transparent 100%);
+            border-radius: 1px;
+            box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1);
+            animation: lineExpand 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            animation-delay: 2.5s;
+            width: 0;
+        }
+
+        .text-container {
+            position: absolute;
+            bottom: 20px;
+            left: 120px;
+            opacity: 0;
+            animation: textAnimation 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            animation-delay: 2.8s;
+        }
+
+        .main-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                0 1px 2px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            background: linear-gradient(90deg, #ffffff 0%, #f0f8ff 50%, #e6f3ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #B8D4F0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .glow-effect {
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(74, 144, 226, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            animation: glowAnimation 6s ease-in-out forwards;
+            animation-delay: 1s;
+            filter: blur(8px);
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffffff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkleAnimation 1s ease-in-out forwards;
+        }
+
+        .sparkle:nth-child(1) {
+            bottom: 70px;
+            left: 150px;
+            animation-delay: 3.2s;
+        }
+
+        .sparkle:nth-child(2) {
+            bottom: 85px;
+            left: 200px;
+            animation-delay: 3.5s;
+        }
+
+        .sparkle:nth-child(3) {
+            bottom: 60px;
+            left: 180px;
+            animation-delay: 3.8s;
+        }
+
+        /* Animations */
+        @keyframes circleAnimation {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(40px) scale(0.5);
+            }
+            20% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+            40% {
+                transform: translateX(-50%) translateY(0) scale(1.1);
+            }
+            60% {
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-300px) translateY(0) scale(1);
+            }
+        }
+
+        @keyframes linesAnimation {
+            0% {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes lineExpand {
+            0% {
+                width: 0;
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                width: 300px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes textAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) translateX(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) translateX(0);
+            }
+        }
+
+        @keyframes glowAnimation {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes sparkleAnimation {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        /* Control buttons */
+        .controls {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            z-index: 2000;
+        }
+
+        .control-btn {
+            background: rgba(74, 144, 226, 0.8);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin-right: 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 16px rgba(74, 144, 226, 0.3);
+        }
+
+        .control-btn:hover {
+            background: rgba(74, 144, 226, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+        }
+
+        /* Demo background elements */
+        .demo-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(74, 144, 226, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(46, 134, 171, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .demo-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(74, 144, 226, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(74, 144, 226, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-bg"></div>
+    <div class="demo-grid"></div>
+    
+    <div class="controls">
+        <button class="control-btn" onclick="restartAnimation()">Restart Animation</button>
+        <button class="control-btn" onclick="toggleBackground()">Toggle Background</button>
+    </div>
+
+    <div class="lower-third-container">
+        <div class="glow-effect"></div>
+        <div class="circle-element"></div>
+        
+        <div class="lines-container">
+            <div class="line-primary"></div>
+            <div class="line-secondary"></div>
+            <div class="line-accent"></div>
+        </div>
+        
+        <div class="text-container">
+            <div class="main-text">Samo Farzandlari</div>
+            <div class="subtitle-text">Educational Excellence</div>
+        </div>
+        
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+    </div>
+
+    <script>
+        function restartAnimation() {
+            const container = document.querySelector('.lower-third-container');
+            container.style.animation = 'none';
+            
+            // Reset all animations
+            const animatedElements = container.querySelectorAll('*');
+            animatedElements.forEach(element => {
+                element.style.animation = 'none';
+                element.offsetHeight; // Trigger reflow
+            });
+            
+            // Restart animations
+            setTimeout(() => {
+                location.reload();
+            }, 100);
+        }
+
+        let bgToggled = false;
+        function toggleBackground() {
+            const bg = document.querySelector('.demo-bg');
+            const grid = document.querySelector('.demo-grid');
+            
+            if (!bgToggled) {
+                bg.style.background = '#000000';
+                grid.style.display = 'none';
+                bgToggled = true;
+            } else {
+                bg.style.background = `
+                    radial-gradient(circle at 20% 20%, rgba(74, 144, 226, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(46, 134, 171, 0.1) 0%, transparent 50%),
+                    linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)`;
+                grid.style.display = 'block';
+                bgToggled = false;
+            }
+        }
+
+        // Auto-restart every 8 seconds for demo
+        setInterval(() => {
+            restartAnimation();
+        }, 8000);
+    </script>
+</body>
+</html>
